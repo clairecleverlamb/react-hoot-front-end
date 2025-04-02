@@ -6,8 +6,15 @@ const HootForm = (props) => {
         text: '',
         category: 'News',
     });
-    const handleChange = (evt) => {};
-    const handleSubmit = (evt) => {};
+    const handleChange = (evt) => {
+        setFormData({
+            ...formData, [evt.target.name]: evt.target.value
+        });
+    };
+    const handleSubmit = (evt) => {
+        evt.preventDefault();
+        console.log('formData: ', formData)
+    };
 
     return (
         <main>
@@ -17,9 +24,18 @@ const HootForm = (props) => {
                   required 
                   type="text"
                   name="title"
-                  id="text-input"
-                  value={formData.text}
+                  id="title-input"
+                  value={formData.title}
                   onChange={handleChange}
+                />
+                <label htmlFor='text-input'>Text</label>
+                <textarea
+                    required
+                    type='text'
+                    name='text'
+                    id='text-input'
+                    value={formData.text}
+                    onChange={handleChange}
                 />
                 <label htmlFor="category-input">Category</label>
                 <select 
