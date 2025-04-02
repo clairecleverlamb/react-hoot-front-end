@@ -12,4 +12,17 @@ const index = async () => {
     }
 }
 
-export { index }; // name export syntax, (used to export multiple function )
+const show = async (hootId) => {
+    try {  //need config object, bc this is protected
+        const res = await fetch(`${BASE_URL}/${hootId}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export { index, show }; // name export syntax, (used to export multiple function )
