@@ -1,19 +1,27 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useContext} from 'react';
 import CommentForm from '../CommentForm/CommentForm';
-import { show } from '../../services/hootService';
-import { useParams } from "react-router";
+import * as hootService from '../../services/hootService';
+// import { show, create, createComment} from '../../services/hootService';
+import { useParams, Link } from "react-router";
 
 const HootDetails = (props) => {
-    const [hoot, setHoot] = useState();
+    const [hoot, setHoot] = useState(null);
     const { hootId } = useParams();
 
     const handleAddComment = async (commentFormData) => {
-        console.log('Comment Form Data: ', commentFormData);
-    }
+        const newComment = await hootService.createComment(
+            hootId,
+            commentFormData
+        );
+        setHoot({
+            ...hoot,
+            comments: [...hoot.comments, newComment]
+        });
+    };
 
     useEffect(() => {
         const fetchHoot = async () => {
-            const hootData = await show(hootId);
+            const hootData = await hootService.show(hootId);
             setHoot(hootData);
         }
         fetchHoot();  // we need to run fetchHoot when run useEffect
@@ -33,6 +41,7 @@ const HootDetails = (props) => {
                 </header>
                 <p>{hoot.text}</p>
             </section>
+
             <section>
                 <h2>Comments</h2>
                 <CommentForm 
@@ -47,6 +56,7 @@ const HootDetails = (props) => {
                               ${new Date(comment.createdAt).toLocaleDateString()}`}
                             </p>
                         </header>
+                        <p>{comment.text}</p>
                     </article>
                 ))}
             </section>
