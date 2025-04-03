@@ -55,7 +55,21 @@ const createComment = async (hootId, commentFormData) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
+
+const deleteHoot = async (hootId) => {
+    try {
+        const res = await fetch(`${BASE_URL}/${hootId}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        return res.json();
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 
-export { index, show, create, createComment }; // name export syntax, (used to export multiple function )
+export { index, show, create, createComment, deleteHoot}; // name export syntax, (used to export multiple function )
