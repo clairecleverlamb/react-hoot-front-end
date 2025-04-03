@@ -41,6 +41,15 @@ const HootDetails = (props) => {
                         {`${hoot.author.username} posted on
                         ${new Date(hoot.createdAt).toLocaleDateString()}`}
                     </p>
+                    {
+                                hoot.author._id === user._id && (
+                                    <>
+                                       <button onClick={() => props.handleDeleteHoot(hootId)}>
+                                           Delete
+                                       </button>
+                                    </>
+                                )
+                    }
                 </header>
                 <p>{hoot.text}</p>
             </section>
@@ -58,15 +67,6 @@ const HootDetails = (props) => {
                               {`${comment.author.username} posted on
                               ${new Date(comment.createdAt).toLocaleDateString()}`}
                             </p>
-                            {
-                                hoot.author._id === user._id && (
-                                    <>
-                                       <button onClick={() => props.handleDeleteHoot(hootId)}>
-                                           Delete
-                                       </button>
-                                    </>
-                                )
-                            }
                         </header>
                         <p>{comment.text}</p>
                     </article>
