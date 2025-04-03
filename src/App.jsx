@@ -10,8 +10,6 @@ import HootList from './components/HootList/HootList';
 import HootDetails from './components/HootDetails/HootDetails';
 import HootForm from './components/HootForm/HootForm';
 
-
-
 import { UserContext } from './contexts/UserContext';
 import * as hootService from './services/hootService';
 
@@ -30,7 +28,14 @@ const App = () => {
     const deletedHoot = await hootService.deleteHoot(hootId);
     setHoots(hoots.filter((hoot) => hoot._id !== deletedHoot._id));
     navigate('/hoots');
-  }
+  };
+
+  const handleUpdateHoot = async (hootId, hootFormData) => {
+    // keep the order! don't mess up the order of the hoot 
+    const updatedHoot = await hootService.updateHoot(hootId, hootFormData);
+    setHoots(hoots.map((hoot) => hootId === hoot._id ? updatedHoot : hoot));
+    navigate(`/hoots/${hootId}`);
+  };
   
 
   useEffect(() => {
@@ -52,6 +57,7 @@ const App = () => {
             <Route path='/hoots' element={<HootList hoots={hoots} />} />
             <Route path='/hoots/new' element={<HootForm handleAddHoot={handleAddHoot}/>} />
             <Route path='/hoots/:hootId' element={<HootDetails handleDeleteHoot={handleDeleteHoot} />} />
+            <Route path='/hoots/:hootId/edit' element={<HootForm handleUpdateHoot={handleUpdateHoot} />} />
           </>
         ) : (
           <>
