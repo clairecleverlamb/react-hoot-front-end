@@ -10,7 +10,7 @@ const index = async () => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 const show = async (hootId) => {
     try {  //need config object, bc this is protected
@@ -23,6 +23,23 @@ const show = async (hootId) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
-export { index, show }; // name export syntax, (used to export multiple function )
+const create = async (hootFormData) => {
+    try {
+        const res = await fetch(BASE_URL, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(hootFormData),
+        });
+        return res.json();
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+export { index, show, create }; // name export syntax, (used to export multiple function )
