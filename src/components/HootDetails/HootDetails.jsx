@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import CommentForm from '../CommentForm/CommentForm';
 import * as hootService from '../../services/hootService';
 // import { show, create, createComment} from '../../services/hootService';
@@ -29,7 +29,7 @@ const HootDetails = (props) => {
         );
         setHoot({
             ...hoot,
-            comments: hoot.comments.filter((comment) => comment._id !== deletedComment._id ),
+            comments: hoot.comments.filter(comment => comment._id !== deletedComment._id),
         });
     };
 
@@ -49,18 +49,19 @@ const HootDetails = (props) => {
                     <p>{hoot.category.toUpperCase()}</p>
                     <h1>{hoot.title}</h1>
                     <p>
-                        {`${hoot.author.username} posted on
-                        ${new Date(hoot.createdAt).toLocaleDateString()}`}
+                        {hoot.author
+                            ? `${hoot.author.username} posted on ${new Date(hoot.createdAt).toLocaleDateString()}`
+                            : 'Posted by Unknown'}
                     </p>
                     {
-                                hoot.author._id === user._id && (
-                                    <>
-                                       <Link to={`/hoots/${hootId}/edit`}>Edit</Link>
-                                       <button onClick={() => props.handleDeleteHoot(hootId)}>
-                                           Delete
-                                       </button>
-                                    </>
-                                )
+                        hoot.author && user && hoot.author._id === user._id && (
+                            <>
+                                <Link to={`/hoots/${hootId}/edit`}>Edit</Link>
+                                <button onClick={() => props.handleDeleteHoot(hootId)}>
+                                    Delete
+                                </button>
+                            </>
+                        )
                     }
                 </header>
                 <p>{hoot.text}</p>
@@ -68,24 +69,25 @@ const HootDetails = (props) => {
 
             <section>
                 <h2>Comments</h2>
-                <CommentForm 
-                   handleAddComment={handleAddComment}
+                <CommentForm
+                    handleAddComment={handleAddComment}
                 />
                 {!hoot.comments.length && <p>There are no comments</p>}
                 {hoot.comments.map((comment) => (
                     <article key={comment._id}>
                         <header>
                             <p>
-                              {`${comment.author.username} posted on
-                              ${new Date(comment.createdAt).toLocaleDateString()}`}
+                                {comment.author
+                                    ? `${comment.author.username} posted on ${new Date(comment.createdAt).toLocaleDateString()}`
+                                    : `Unknown user posted on ${new Date(comment.createdAt).toLocaleDateString()}`}
                             </p>
                             {
-                                comment.author._id === user._id && (
+                                comment.author && user && comment.author._id === user._id && (
                                     <>
-                                       <Link to={`/hoots/${hootId}/comments/${comment._id}`}>Edit</Link>
-                                       <button onClick={() => props.handleDeleteComment(comment._id)}>
-                                           Delete
-                                       </button>
+                                        <Link to={`/hoots/${hootId}/comments/${comment._id}`}>Edit</Link>
+                                        <button onClick={() => props.handleDeleteComment(comment._id)}>
+                                            Delete
+                                        </button>
                                     </>
                                 )
                             }
@@ -95,8 +97,7 @@ const HootDetails = (props) => {
                 ))}
             </section>
         </main>
-    ) 
-  };
-  
-  export default HootDetails;
-  
+    )
+};
+
+export default HootDetails;

@@ -18,6 +18,7 @@ import * as hootService from './services/hootService';
 const App = () => {
   const { user } = useContext(UserContext);
   const [hoots, setHoots] = useState([]);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
 
   const handleAddHoot = async (hootFormData) => {
@@ -37,6 +38,12 @@ const App = () => {
     const updatedHoot = await hootService.updateHoot(hootId, hootFormData);
     setHoots(hoots.map((hoot) => hootId === hoot._id ? updatedHoot : hoot));
     navigate(`/hoots/${hootId}`);
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    const deletedComment = await hootService.deleteComment(commentId);
+    setComments(comments.filter((comment) => comment._id !== deletedComment._id));
+    navigate(`/hoots/${hootId}/comments`);
   };
   
 
@@ -60,6 +67,7 @@ const App = () => {
             <Route path='/hoots/new' element={<HootForm handleAddHoot={handleAddHoot}/>} />
             <Route path='/hoots/:hootId' element={<HootDetails handleDeleteHoot={handleDeleteHoot} />} />
             <Route path='/hoots/:hootId/edit' element={<HootForm handleUpdateHoot={handleUpdateHoot} />} />
+            <Route path='/hoots/:hootId/comments/:commentId' element={<CommentForm handleDeleteComment={handleDeleteComment} /> } />
             <Route path='/hoots/:hootId/comments/:commentId/edit' element={<CommentForm />} />
           </>
         ) : (
